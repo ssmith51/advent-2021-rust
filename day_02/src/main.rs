@@ -4,6 +4,7 @@ use std::io::{BufRead, BufReader};
 //Gobal file name for quick change
 static FILE_NAME: &str = "input.txt";
 
+//Using Structs like this removes builtin functionality (e.g. println!("{:?}") )
 struct Command {
   direction: String,
   distance: i64,
