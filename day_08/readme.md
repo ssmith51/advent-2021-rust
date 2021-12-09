@@ -23,7 +23,7 @@ This one took me a bit to figure out. I knew we were working with sets and had t
 With that logic I spent wayyyyy too long trying to write this in Rust. I ran into the following challenges: 
 
 1. How to do a `String` compare. All the `.contains()` function take `&str` not `String`, or `char` or `slice of chars`. I finally solved this, but it wasn't as simple as that. 
-2. Letters were not guaranted to be in the same order! I brute forced this by converting `Strings` to `Vec<char`> to hold each indivual character, iterate over it and see if the readings value `String` contained that character
+2. Letters were not guaranted to be in the same order! I brute forced this by converting `Strings` to `Vec<char`> to hold each indivual character, iterate over it and see if the readings value `String` contained each `char`. 
 3. My lack of Rust skill lead me to creating a LOT of variables and conversions back and forth. I'm 100% positive that my solution has a more straight forward coding approach. 
 
 ## Summary
