@@ -54,6 +54,22 @@ fn puzzle_1(readings: &Vec<String>) -> i64 {
   count
 }
 
+/*
+Here is the Logic to determine what number is what. 
+
+1, 4, 7 , 8 are known
+Top Line = difference between 7-1
+Top Left & Middle Lines = difference 4 - 1
+Bottom Left & Bottom Lines = difference of 8-4 - Top Line
+
+
+2 = len(5) w/Top Line, Bottom Left & Bottom Line
+5 = len(5) w/Top Line, Top Left & Middle
+3 = Last len(5) left
+0 = len(6) w/Top Line, Right Lines, Top Line, Bottom Left & Bottom Lines, 1 of Top Right and Middle
+6 = len(6) w/Top Line, Top Left & Middle, Bottom Left & Bottom, 1 of Right Lines
+9 = len(6) left
+*/
 fn puzzle_2(readings: &Vec<String>) -> i64 {
   let mut total: i64 = 0;
 
@@ -64,15 +80,18 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
 
     //Known Numbers
     let one = nums.iter().find(|val| val.len() == 2).unwrap().to_string();
-    let mut two: String = "".to_string();
-    let mut three: String = "".to_string();
     let four = nums.iter().find(|val| val.len() == 4).unwrap().to_string();
-    let mut five: String = "".to_string();
-    let mut six: String = "".to_string();
     let seven = nums.iter().find(|val| val.len() == 3).unwrap().to_string();
     let eight = nums.iter().find(|val| val.len() == 7).unwrap().to_string();
+    
+    //Numbers to calculate
+    let mut two: String = "".to_string();
+    let mut three: String = "".to_string();
+    let mut five: String = "".to_string();
+    let mut six: String = "".to_string();
     let mut nine: String = "".to_string();
     let mut zero: String = "".to_string();
+
     
     //Find the Top, Left, Middle, Bottom Left and Bottom line possibilities
     let top_line: String = find_difference(&seven, &one);
@@ -96,18 +115,23 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
       // Find 2, 3 5
       if num.len() == 5 {
         
+        //5 = len(5) w/Top Line, Top Left & Middle Lines
         if num.contains(&top_line[..]) && num.contains(tlm[0]) && num.contains(tlm[1]) {
           five = num.to_string();
 
+        //2 = len(5) w/Top Line, Bottom Left & Bottom Line
         } else if num.contains(&top_line[..]) && num.contains(blb[0]) && num.contains(blb[1]) {
           two = num.to_string();
-
+        
+          //3 = Last len(5) left
         } else {
           three = num.to_string();
         }
-      } else if num.len() == 6 {
 
-        //Find 0, 6, 9
+      //Find 0, 6, 9
+      } else if num.len() == 6 { 
+
+        //0 = len(6) w/Top Line, Right Lines, Top Line, Bottom Left & Bottom Lines, 1 of Top Right and Middle
         if num.contains(&top_line[..]) && num.contains(o[0]) && num.contains(o[1]) && num.contains(blb[0]) && num.contains(blb[1]) {
           if num.contains(tlm[0]) && !num.contains(tlm[1]) {
             zero = num.to_string();
@@ -116,6 +140,7 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
             zero = num.to_string();
           }
 
+        //6 = len(6) w/Top Line, Top Left & Middle, Bottom Left & Bottom, 1 of Right Lines
         } else if num.contains(&top_line[..]) && num.contains(tlm[0]) && num.contains(tlm[1]) && num.contains(blb[0]) && num.contains(blb[1]) {
           if num.contains(o[0]) && !num.contains(o[1]) {
             six = num.to_string();
@@ -124,7 +149,8 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
 
             six = num.to_string();
           }
-
+        
+        //9 = len(6) left
         } else {
           nine = num.to_string();
         }
@@ -136,9 +162,10 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
     println!(" One: {}\n Two: {}\n Three: {}\n Four: {}\n Five: {}\n Six: {}\n Seven: {}\n Eight: {}\n Nine: {}\n Zero: {}", one, two, three, four, five, six, seven, eight, nine, zero);
     println!("");
     
-    //Read the input and add up the values 
+    //Read the input from after the | 
     let reading: Vec<&str> = parts[1].split(" ").collect();
 
+    //Covert each number to a vector for easier comparison
     let one: Vec<char> = one.chars().collect();
     let two: Vec<char> = two.chars().collect();
     let three: Vec<char> = three.chars().collect();
@@ -150,11 +177,15 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
     let nine: Vec<char> = nine.chars().collect();
     let zero: Vec<char> = zero.chars().collect();
 
+    //Holds the running value from the input 
     let mut val: String = "".to_string();
-    for num in reading {
-      let num: String = num.to_string();
-      
 
+    for num in reading {
+
+      //Convert num from &str to String for contains function
+      let num: String = num.to_string();
+
+      //Caculate the number from the code by comparing every letter in the code with the letters in the number
       if num.len() > 1 {
         if num.contains(one[0]) && num.contains(one[1]) && num.len() == 2 {
           val.push('1');
@@ -183,7 +214,10 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
     }
     println!("Reading Value: {}", val);
 
+    //Convert the read value to a int
     let calc: i64 = val.parse().unwrap();
+
+    //Create a running total of the vaules
     total += calc;
 
   }
@@ -191,6 +225,8 @@ fn puzzle_2(readings: &Vec<String>) -> i64 {
   total
 }
 
+
+//Set comparison to find what characters are not included in the second variable passed in
 fn find_difference(left: &String, right: &String)  -> String {
   let mut a: HashSet<char> = HashSet::new();
   for c in left.chars() {
@@ -207,20 +243,3 @@ fn find_difference(left: &String, right: &String)  -> String {
   diff
 
 }
-
-
-// fn find_two(vals: Vec<&str>) String {
-//   let two = |val: String, top: String, bottom: String| {
-//     let mut s: String = String::new();
-    
-//     if val.contains(&top[..]) && val.contains(&bottom[..]) {
-//       s = val;
-//     }
-
-//     s
-//   };
-
-
-
-
-// }
