@@ -20,7 +20,7 @@ This one took me a bit to figure out. I knew we were working with sets and had t
 >* 6 = len(6) w/Top Line, Top Left & Middle, Bottom Left & Bottom, 1 of Right Lines
 >* 9 = len(6) left
 
-With that logic I spent wayyyyy too long trying to write this in rust. I ran into the following challenges: 
+With that logic I spent wayyyyy too long trying to write this in Rust. I ran into the following challenges: 
 
 1. How to do a `String` compare. All the `.contains()` function take `&str` not `String`, or `char` or `slice of chars`. I finally solved this, but it wasn't as simple as that. 
 2. Letters were not guaranted to be in the same order! I brute forced this by converting `Strings` to `Vec<char`> to hold each indivual character, iterate over it and see if the readings value `String` contained that character
