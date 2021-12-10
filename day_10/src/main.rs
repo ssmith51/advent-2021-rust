@@ -150,6 +150,7 @@ fn puzzle_2(input: &Vec<String>) -> i64 {
   println!("Median Score Position: {}", median);
 
   //Return the median score
-  *scores.get(median as usize).unwrap();
+  score = *scores.get(median as usize).unwrap();
+  score
 
 }
