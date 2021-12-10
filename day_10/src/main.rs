@@ -1,18 +1,18 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-// use regex::Regex;
-
 //Gobal file name for quick change
 static FILE_NAME: &str = "input.txt";
 
 fn main() {
     println!("Advent of Code - Day 10");
     let input = read_input(FILE_NAME);
+    
     println!("----------------------");
     println!("Starting Puzzle 1");
     let result = puzzle_1(&input);
     println!("Final Score: {}", result);
+
     println!("----------------------");
     println!("Starting Puzzle 2");
     let result = puzzle_2(&input);
