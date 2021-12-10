@@ -103,17 +103,16 @@ fn puzzle_2(input: &Vec<String>) -> i64 {
        expected.push('>');
 
       } else if &c != expected.get(expected.len() - 1).unwrap() {
-        expected.clear();
+        expected.clear(); //This is a change from Puzzle 1
         break;
-      } else if &c == expected.last().unwrap() {
+      } else if &c == expected.last().unwrap() { //This was an add from puzzle 1
         expected.pop();
       }
 
     }
-
     
 
-    //Find the remaining scores
+    //Find the remaining scores - Slight change in how scores are calculated
     if expected.len() > 0 {
 
       let mut i: i32 = (expected.len() -1) as i32; 
@@ -140,16 +139,17 @@ fn puzzle_2(input: &Vec<String>) -> i64 {
 
     }
 
-  
-
   }
 
+  //Sort the Scores
   scores.sort();
   println!("Number of Scores: {}", scores.len());
+
+  //Calculate the median score
   let median = scores.len() / 2;
   println!("Median Score Position: {}", median);
-  score = *scores.get(median as usize).unwrap();
 
-  score
+  //Return the median score
+  *scores.get(median as usize).unwrap();
 
 }
