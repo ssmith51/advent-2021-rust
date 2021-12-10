@@ -93,7 +93,7 @@ fn puzzle_2() -> Result<u32, Box<dyn std::error::Error>> {
             (true, true) | (false, false) => b'1',
             _ => b'0',
         };
-        seq = seq.into_iter().filter(|l| l.as_bytes()[col] == bit).collect();
+        seq = seq.into_iter().filter(|l| l.as_bytes()[col ] == bit).collect();
         col += 1;
     }
     Ok(u32::from_str_radix(seq.first().ok_or("empty input")?, 2)?)

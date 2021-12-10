@@ -7,7 +7,7 @@ use std::iter::FromIterator;
 static FILE_NAME: &str = "input.txt";
 
 fn main() {
-  println!("Advent of Code - Day 01");
+  println!("Advent of Code - Day 08");
   let input = read_input(FILE_NAME);
 
   println!("----------------------");
