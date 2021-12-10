@@ -65,7 +65,7 @@ fn puzzle_1(height_map: &HeightMap) -> i32 {
 
     for val in row {
       
-      //Calculate comparision indexes
+      //Calculate comparision indexes, set 10 as the max value if index is out of bounds since it will always be the highest
       let bottom :i32 = if y == height_map.max_y {10} else {(height_map.readings[(y+1)][x])as i32};
       let top: i32 = if y == 0 {10} else {height_map.readings[(y-1)][x] as i32};
       let prev: i32 = if x == 0 {10} else {row[(x-1)] as i32};
