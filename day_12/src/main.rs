@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::collections::HashMap;
+use std::collections::VecDeque;
 
 //Gobal file name for quick change
 const FILE_NAME: &str = "small-test.txt";
@@ -16,7 +17,8 @@ fn main() {
   println!("Advent of Code - Day 12");
   let caves = read_input(FILE_NAME);
   println!("Caves Found: {:?}", caves);
-  puzzle_1(caves);
+  puzzle_1(caves.clone());
+  puzzle_2(caves);
 }
 
 fn read_input(filename: &str) -> HashMap<String, Vec<String>>{
@@ -68,10 +70,127 @@ fn puzzle_1(caves: HashMap<String, Vec<String>> ) {
   //Find all paths from Start to End
   //Remove any paths that go through small twice 
 
-  let mut paths: Vec<String> = Vec::new();
-  let start = caves.get("start").unwrap();
-  start.iter().map(|cave| paths.push(cave.clone()));
+  let mut paths: VecDeque<Vec<String>> = VecDeque::new();
+  let mut valid_paths: Vec<Vec<String>> = Vec::new();
+  let mut count = 0;
+  
+  paths.push_back(vec!["start".to_string()]);
 
-  println!("Start Cave: {:?}", start);
+  while let Some(path) = paths.pop_front() {
+    println!("Path: {:?}", path);
+    let p = path.last().unwrap();
+    
+    for next_path in caves.get(p).unwrap().iter() {
+
+      let small = next_path.chars().all(|c| c.is_ascii_lowercase());
+
+      if small && path.contains(next_path) {
+        continue;
+      }
+
+      if next_path == "end" {
+        count +=1;
+        let v = path.clone();
+        valid_paths.push(v);
+        continue;
+      }
+
+      let mut new_path = path.clone();
+      new_path.push(next_path.clone());
+      paths.push_back(new_path);
+
+
+    }
+
+  }
+  
+  
+
+  println!("Valid Paths: {:?}", valid_paths);
+  println!("Paths: {:?}", count);
+
+}
+
+fn puzzle_2(caves: HashMap<String, Vec<String>>) {
+  
+  let mut paths: VecDeque<Vec<String>> = VecDeque::new();
+  let mut valid_paths: Vec<Vec<String>> = Vec::new();
+
+  let mut count = 0;
+  
+  paths.push_back(vec!["start".to_string()]);
+
+  while let Some(path) = paths.pop_front() {
+    println!("Path: {:?}", path);
+
+    let p = path.last().unwrap();
+    
+    for next_path in caves.get(p).unwrap().iter() {
+
+      let mut small_visited = false;
+      let small = next_path.chars().all(|c| c.is_ascii_lowercase());
+
+      if next_path == "start" {
+        continue;
+      }
+
+      if small && path.contains(next_path) {
+        let mut c_count = 0; 
+
+        for i in path.clone() {
+          println!("I: {}", i);
+          if next_path.clone() == i {
+            c_count += 1;
+          }
+
+          let mut small_count = 0; 
+          for j in path.clone() {
+            if j == i {
+              small_count += 1;
+              
+            }
+
+            if small_count > 1 {
+              small_visited = true;
+            }
+
+            if c_count > 1 && small_visited   {
+              continue;
+            }
+
+          }
+        }
+
+        if c_count > 1  {
+          continue;
+        }
+
+      }
+
+
+      if next_path == "end" {
+        count +=1;
+        let v = path.clone();
+        valid_paths.push(v);
+        continue;
+      }
+
+      let mut new_path = path.clone();
+      new_path.push(next_path.clone());
+      paths.push_back(new_path);
+
+
+    }
+
+  }
+  
+  
+
+  println!("Paths: {:?}", count);
+  for mut vp in valid_paths {
+    vp.push("end".to_string());
+    println!("{:?}", vp);
+  }
+
 
 }
