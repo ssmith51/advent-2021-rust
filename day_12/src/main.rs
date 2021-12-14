@@ -2,9 +2,10 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::collections::HashMap;
 use std::collections::VecDeque;
+use std::time::{Instant};
 
 //Gobal file name for quick change
-const FILE_NAME: &str = "small-test.txt";
+const FILE_NAME: &str = "input.txt";
 
 // #[derive(Debug)]
 // struct Cave {
@@ -16,9 +17,20 @@ const FILE_NAME: &str = "small-test.txt";
 fn main() {
   println!("Advent of Code - Day 12");
   let caves = read_input(FILE_NAME);
-  println!("Caves Found: {:?}", caves);
-  puzzle_1(caves.clone());
-  puzzle_2(caves);
+  // println!("Caves Found: {:?}", caves);
+  println!("Starting Puzzle 1");
+  let start = Instant::now();
+  let count = puzzle_1(caves.clone());
+  let duration = start.elapsed();
+  println!("Total Paths: {} calculated in: {:?}", count, duration);
+
+  println!("----------------------");
+  println!("Starting Puzzle 2");
+  let start = Instant::now();
+  let count = puzzle_2(caves);
+  let duration = start.elapsed();
+  println!("Total Paths: {} calculated in: {:?}", count, duration);
+
 }
 
 fn read_input(filename: &str) -> HashMap<String, Vec<String>>{
@@ -44,21 +56,6 @@ fn read_input(filename: &str) -> HashMap<String, Vec<String>>{
       .and_modify(|neighbor| neighbor.push(cave_1.clone()))
       .or_insert(vec![cave_1]);
 
-    // if existing_cave.is_none() { //If the cave does not exist, create a new one
-    //   let is_small = name.chars().all(|c| c.is_ascii_lowercase()); //check if all the chars are lowercase
-    //   let mut connected: Vec<String> = Vec::new();
-    //   connected.push(parts[1].to_string());
-  
-    //     //Create a 'Cave'
-    //   let c: Cave = Cave {
-    //     name: name, 
-    //     is_small: is_small,
-    //     connected: connected,
-    //   };
-    //   caves.insert(parts[0].to_string(), c);
-    // } else { // If the cave does exist, add a new cave
-    //   existing_cave.unwrap().connected.push(parts[1].to_string());
-    // }
   }
 
   caves
@@ -66,18 +63,14 @@ fn read_input(filename: &str) -> HashMap<String, Vec<String>>{
 }
 
 
-fn puzzle_1(caves: HashMap<String, Vec<String>> ) {
-  //Find all paths from Start to End
-  //Remove any paths that go through small twice 
+fn puzzle_1(caves: HashMap<String, Vec<String>> ) -> i64 {
 
   let mut paths: VecDeque<Vec<String>> = VecDeque::new();
-  let mut valid_paths: Vec<Vec<String>> = Vec::new();
   let mut count = 0;
   
   paths.push_back(vec!["start".to_string()]);
 
   while let Some(path) = paths.pop_front() {
-    println!("Path: {:?}", path);
     let p = path.last().unwrap();
     
     for next_path in caves.get(p).unwrap().iter() {
@@ -90,8 +83,8 @@ fn puzzle_1(caves: HashMap<String, Vec<String>> ) {
 
       if next_path == "end" {
         count +=1;
-        let v = path.clone();
-        valid_paths.push(v);
+        let mut v = path.clone();
+        v.push("end".to_string());
         continue;
       }
 
@@ -104,67 +97,55 @@ fn puzzle_1(caves: HashMap<String, Vec<String>> ) {
 
   }
   
-  
-
-  println!("Valid Paths: {:?}", valid_paths);
-  println!("Paths: {:?}", count);
+  count
 
 }
 
-fn puzzle_2(caves: HashMap<String, Vec<String>>) {
+fn puzzle_2(caves: HashMap<String, Vec<String>>) -> i64 {
   
   let mut paths: VecDeque<Vec<String>> = VecDeque::new();
   let mut valid_paths: Vec<Vec<String>> = Vec::new();
-
   let mut count = 0;
   
   paths.push_back(vec!["start".to_string()]);
 
   while let Some(path) = paths.pop_front() {
-    println!("Path: {:?}", path);
-
+    // println!("Path: {:?}", path);
     let p = path.last().unwrap();
     
     for next_path in caves.get(p).unwrap().iter() {
-
-      let mut small_visited = false;
-      let small = next_path.chars().all(|c| c.is_ascii_lowercase());
 
       if next_path == "start" {
         continue;
       }
 
-      if small && path.contains(next_path) {
-        let mut c_count = 0; 
+      let small = next_path.chars().all(|c| c.is_ascii_lowercase());
 
-        for i in path.clone() {
-          println!("I: {}", i);
-          if next_path.clone() == i {
-            c_count += 1;
-          }
+      let mut small_visited = false; 
+      if small  {
+        //Check to see if the cave exists anywhere else in the path
+        if path.contains(next_path) {
+          //Check to see if any other small cave is duplicated in the path
 
-          let mut small_count = 0; 
-          for j in path.clone() {
-            if j == i {
-              small_count += 1;
+          for i in path.clone() {
+
+            if  i.chars().all(|c| c.is_ascii_lowercase()) && (i != "start" || i != "end"){
+              let count = path.iter().filter(|&n| *n == i).count();
+              // println!("Count of {}: {}", i, count);
+              if count > 1 {
+                small_visited = true; 
+              }
               
             }
 
-            if small_count > 1 {
-              small_visited = true;
-            }
-
-            if c_count > 1 && small_visited   {
-              continue;
-            }
-
           }
-        }
 
-        if c_count > 1  {
-          continue;
         }
+      
+      }
 
+      if small_visited {
+        continue;
       }
 
 
@@ -178,19 +159,14 @@ fn puzzle_2(caves: HashMap<String, Vec<String>>) {
       let mut new_path = path.clone();
       new_path.push(next_path.clone());
       paths.push_back(new_path);
-
-
     }
 
-  }
-  
-  
+    // println!("Path: Complete");
+    
 
-  println!("Paths: {:?}", count);
-  for mut vp in valid_paths {
-    vp.push("end".to_string());
-    println!("{:?}", vp);
+    
   }
 
 
+  count
 }
