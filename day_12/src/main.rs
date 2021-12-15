@@ -134,6 +134,7 @@ fn puzzle_2(caves: HashMap<String, Vec<String>>) -> i64 {
               // println!("Count of {}: {}", i, count);
               if count > 1 {
                 small_visited = true; 
+                break;
               }
               
             }
