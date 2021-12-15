@@ -5,15 +5,22 @@ use std::time::{Instant};
 //Gobal file name for quick change
 const FILE_NAME: &str = "test.txt";
 
+type Point = (usize, usize);
+
+#[derive(Debug, Clone)]
+struct Grid {
+    readings: Vec<Vec<usize>>,
+    folds: Vec<(String, usize)>,
+  }
+
 fn main() {
     println!("Advent of Code - Day 12");
     let input = read_input(FILE_NAME);
-    // println!("Caves Found: {:?}", caves);
     println!("Starting Puzzle 1");
     let start = Instant::now();
-    // let count = puzzle_1(caves.clone());
+    let result = puzzle_1(input.clone(), true);
     let duration = start.elapsed();
-    println!("Total Duration {:?}", duration);
+    println!("Total Dots: {}. Calculated In {:?}", result, duration);
   
     // println!("----------------------");
     // println!("Starting Puzzle 2");
@@ -23,10 +30,83 @@ fn main() {
     // println!("Total Paths: {} calculated in: {:?}", count, duration);
 }
 
-fn read_input(filename: &str) {
+fn read_input(filename: &str) -> Grid{
+
+    let mut grid: Grid = Grid{
+        readings: Vec::new(),
+        folds: Vec::new(),
+    };
+
+    let fi = File::open(filename).unwrap();
+    let reader = BufReader::new(fi);
+
+    let mut points: Vec<Point> = Vec::new();
+    let (mut max_x, mut max_y) = (0,0);
+    for (_index, line) in reader.lines().enumerate() {
+        let line = line.unwrap();
+
+        if line.contains("fold") {
+
+            let parts: Vec<&str> = line.split(" ")
+                .collect::<Vec<&str>>()[2]
+                .split("=")
+                .collect();
+                
+            let f = (parts[0].to_string(), parts[1].parse().unwrap() );
+            grid.folds.push(f);
+
+        } else if line.len() > 0 {
+            let parts: Vec<usize> = line.split(",")
+                .map(|v| v.parse::<usize>().unwrap())
+                .collect();
+            
+            let point: Point = (parts[0], parts[1]);
+
+            //Find the Max X and Y Values
+            max_x = if point.0 > max_x {point.0} else {max_x};
+            max_y = if point.1 > max_y {point.1} else {max_y};
+            points.push(point);
+
+        }
+    }
+    max_x += 1;
+    max_y += 1;
+    grid.readings = vec![vec![0; max_x]; max_y];
+    for point in points {
+        grid.readings[point.1][point.0] = 1;
+    }
+
+    grid
 
 }
 
-// fn puzzle_1() {
+fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
+    let mut count = 0; 
+
+    if debug {
+        for row in &grid.readings {
+            println!("{:?}", row);
+        }
+    }
+
+    let first_fold = &grid.folds.get(0).unwrap();
+    println!("First Fold: {:?}", first_fold);
+
+    if first_fold.0 == "y" {
+        fold_y(&grid, first_fold.1);
+    }
+    
+
+    count += 1; 
+
+    count
+
+}
+
+// fn fold_x() {
 
 // }
+
+fn fold_y(mut grid: &Grid, fold: usize) {
+
+}
