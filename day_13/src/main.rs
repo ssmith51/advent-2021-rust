@@ -92,11 +92,6 @@ fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
     let first_fold = &grid.folds.get(0).unwrap();
     println!("First Fold: {:?}", first_fold);
 
-    for fold in &grid.folds {
-        println!("Fold 1: {}", fold.0)
-
-    }
-
     if first_fold.0 == "y" {
       grid = fold_y(grid.clone(), first_fold.1);
     } else if first_fold.0 == "x" {
@@ -188,9 +183,10 @@ fn fold_x(mut grid: Grid, fold: usize) -> Grid {
 
   let max_x = grid.readings.get(0).unwrap().len();
   let max_y = grid.readings.len();
+
+
   let mut new_x: usize = 0;
   let mut x: usize = max_x -1;
-
   //Transpose the left side of the fold
   for y in 0..max_y {
     for x in 0..fold {
