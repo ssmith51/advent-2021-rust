@@ -3,7 +3,7 @@ use std::io::{BufRead, BufReader};
 use std::time::{Instant};
 
 //Gobal file name for quick change
-const FILE_NAME: &str = "input.txt";
+const FILE_NAME: &str = "scott.txt";
 
 type Point = (usize, usize);
 
