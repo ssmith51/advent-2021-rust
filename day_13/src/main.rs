@@ -22,12 +22,12 @@ fn main() {
     let duration = start.elapsed();
     println!("Total Dots: {}. Calculated In {:?}", result, duration);
   
-    // println!("----------------------");
-    // println!("Starting Puzzle 2");
-    // let start = Instant::now();
-    // let count = puzzle_2(caves);
-    // let duration = start.elapsed();
-    // println!("Total Paths: {} calculated in: {:?}", count, duration);
+    println!("----------------------");
+    println!("Starting Puzzle 2");
+    let start = Instant::now();
+    puzzle_2(input.clone(), true);
+    let duration = start.elapsed();
+    println!("Total Duration: {:?}", duration);
 }
 
 fn read_input(filename: &str) -> Grid{
@@ -92,6 +92,11 @@ fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
     let first_fold = &grid.folds.get(0).unwrap();
     println!("First Fold: {:?}", first_fold);
 
+    for fold in &grid.folds {
+        println!("Fold 1: {}", fold.0)
+
+    }
+
     if first_fold.0 == "y" {
       grid = fold_y(grid.clone(), first_fold.1);
     } else if first_fold.0 == "x" {
@@ -120,9 +125,25 @@ fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
 
 }
 
-// fn fold_x() {
+fn puzzle_2(mut grid: Grid, debug: bool) -> Grid{
 
-// }
+    let folds = grid.clone().folds;
+    for fold in folds {
+        if fold.0 == "y" {
+            grid = fold_y(grid.clone(), fold.1);
+          } else if fold.0 == "x" {
+            grid = fold_x(grid.clone(), fold.1);
+          }
+    }
+
+    if debug {
+      for row in &grid.readings {
+          println!("{:?}", row);
+      }
+    }
+
+    grid
+}
 
 fn fold_y(mut grid: Grid, fold: usize) -> Grid {
 
