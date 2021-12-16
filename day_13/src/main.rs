@@ -3,7 +3,7 @@ use std::io::{BufRead, BufReader};
 use std::time::{Instant};
 
 //Gobal file name for quick change
-const FILE_NAME: &str = "scott.txt";
+const FILE_NAME: &str = "input.txt";
 
 type Point = (usize, usize);
 
@@ -98,11 +98,6 @@ fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
       grid = fold_x(grid.clone(), first_fold.1);
     }
 
-    if debug {
-      for row in &grid.readings {
-          println!("{:?}", row);
-      }
-    }
     
     for row in grid.readings {
       for val in row {
@@ -133,7 +128,15 @@ fn puzzle_2(mut grid: Grid, debug: bool) -> Grid{
 
     if debug {
       for row in &grid.readings {
-          println!("{:?}", row);
+        let mut r = "".to_string();
+        for v in row {
+          if *v == 0 as usize {
+            r = format!("{}  ", r);
+          } else {
+            r = format!("{} #", r);
+          }
+        }
+        println!("{}", r);
       }
     }
 
@@ -147,6 +150,9 @@ fn fold_y(mut grid: Grid, fold: usize) -> Grid {
 
   let max_x = grid.readings.get(0).unwrap().len();
   let max_y = grid.readings.len();
+
+  println!("Y Fold: {}, {}", max_y-1  - fold, fold -0 );
+
 
   //Transpose Top of the Fold
   for y in 0..fold {
@@ -184,6 +190,7 @@ fn fold_x(mut grid: Grid, fold: usize) -> Grid {
   let max_x = grid.readings.get(0).unwrap().len();
   let max_y = grid.readings.len();
 
+  println!("X Fold: {}, {}", max_x-1  - fold, fold -0 );
 
   let mut new_x: usize = 0;
   let mut x: usize = max_x -1;
