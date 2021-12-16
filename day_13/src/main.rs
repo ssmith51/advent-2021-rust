@@ -167,13 +167,29 @@ fn fold_x(mut grid: Grid, fold: usize) -> Grid {
 
   let max_x = grid.readings.get(0).unwrap().len();
   let max_y = grid.readings.len();
+  let mut new_x: usize = 0;
+  let mut x: usize = max_x -1;
 
+  //Transpose the left side of the fold
   for y in 0..max_y {
     for x in 0..fold {
       if grid.readings[y][x] > 0 {
         new_grid[y][x] = 1;
       }
     }
+  }
+
+  //Transpose the 'Flip' of the fold
+  for y in 0..max_y {
+    while x > fold {
+      if grid.readings[y][x] > 0 {
+        new_grid[y][new_x] = 1;
+      }
+      new_x += 1;
+      x -= 1;
+    }
+    x = max_x -1;
+    new_x = 0
   }
 
   grid.readings = new_grid;
