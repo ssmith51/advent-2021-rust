@@ -94,9 +94,7 @@ fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
 
     if first_fold.0 == "y" {
       grid = fold_y(grid.clone(), first_fold.1);
-    } 
-
-    if first_fold.0 == "x" {
+    } else if first_fold.0 == "x" {
       grid = fold_x(grid.clone(), first_fold.1);
     }
 
@@ -143,6 +141,7 @@ fn fold_y(mut grid: Grid, fold: usize) -> Grid {
     }
   }
 
+  //Transpose the 'Flip' of the fold
   let mut y: usize = max_y -1;
   let mut new_y: usize = 0;
   while y > fold {
@@ -156,19 +155,26 @@ fn fold_y(mut grid: Grid, fold: usize) -> Grid {
     new_y += 1;
   }
   
-
   // println!("New Grid: {:?}", new_grid);
 
   grid.readings = new_grid;
-
   grid
-
 }
 
 fn fold_x(mut grid: Grid, fold: usize) -> Grid {
 
   let mut new_grid: Vec<Vec<usize>> = vec![vec![0; fold]; grid.readings.len()];
 
+  let max_x = grid.readings.get(0).unwrap().len();
+  let max_y = grid.readings.len();
+
+  for y in 0..max_y {
+    for x in 0..fold {
+      if grid.readings[y][x] > 0 {
+        new_grid[y][x] = 1;
+      }
+    }
+  }
 
   grid.readings = new_grid;
   grid
