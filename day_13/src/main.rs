@@ -3,7 +3,7 @@ use std::io::{BufRead, BufReader};
 use std::time::{Instant};
 
 //Gobal file name for quick change
-const FILE_NAME: &str = "test.txt";
+const FILE_NAME: &str = "input.txt";
 
 type Point = (usize, usize);
 
@@ -18,7 +18,7 @@ fn main() {
     let input = read_input(FILE_NAME);
     println!("Starting Puzzle 1");
     let start = Instant::now();
-    let result = puzzle_1(input.clone(), true);
+    let result = puzzle_1(input.clone(), false);
     let duration = start.elapsed();
     println!("Total Dots: {}. Calculated In {:?}", result, duration);
   
@@ -93,11 +93,30 @@ fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
     println!("First Fold: {:?}", first_fold);
 
     if first_fold.0 == "y" {
-        fold_y(&grid, first_fold.1);
+      grid = fold_y(grid.clone(), first_fold.1);
+    } 
+
+    if first_fold.0 == "x" {
+      grid = fold_x(grid.clone(), first_fold.1);
+    }
+
+    if debug {
+      for row in &grid.readings {
+          println!("{:?}", row);
+      }
     }
     
+    for row in grid.readings {
+      for val in row {
+        if val > 0 {
+          count += 1;
+        }
+      }
+    }
+    
+    // count += 1; 
 
-    count += 1; 
+    
 
     count
 
@@ -107,6 +126,50 @@ fn puzzle_1(mut grid: Grid, debug: bool) -> i32 {
 
 // }
 
-fn fold_y(mut grid: &Grid, fold: usize) {
+fn fold_y(mut grid: Grid, fold: usize) -> Grid {
 
+  let mut new_grid: Vec<Vec<usize>> = vec![vec![0; grid.readings[0].len()]; fold];
+  // println!("New Grid: {:?}", new_grid);
+
+  let max_x = grid.readings.get(0).unwrap().len();
+  let max_y = grid.readings.len();
+
+  //Transpose Top of the Fold
+  for y in 0..fold {
+    for x in 0..max_x {
+      if grid.readings[y][x] > 0 {
+        new_grid[y][x] = 1;
+      }
+    }
+  }
+
+  let mut y: usize = max_y -1;
+  let mut new_y: usize = 0;
+  while y > fold {
+    for x in 0..max_x{
+      if grid.readings[y][x] > 0 {
+        new_grid[new_y][x] = 1;
+      }
+    }
+
+    y -= 1;
+    new_y += 1;
+  }
+  
+
+  // println!("New Grid: {:?}", new_grid);
+
+  grid.readings = new_grid;
+
+  grid
+
+}
+
+fn fold_x(mut grid: Grid, fold: usize) -> Grid {
+
+  let mut new_grid: Vec<Vec<usize>> = vec![vec![0; fold]; grid.readings.len()];
+
+
+  grid.readings = new_grid;
+  grid
 }
