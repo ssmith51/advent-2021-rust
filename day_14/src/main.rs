@@ -78,7 +78,7 @@ fn puzzle_1(template: Vec<char>, rules: HashMap<(char, char), char>, steps: usiz
   }
 
   let mut most_common: (char, i64) = ('.', 0);
-  let mut least_common: (char, i64) = ('.', 1000000000); //Some Arbitary large number.... bad job here :) 
+  let mut least_common: (char, i64) = ('.', i64::MAX); 
 
   for l in letters.clone() {
 
@@ -152,7 +152,7 @@ fn puzzle_2(template: Vec<char>, rules: HashMap<(char, char), char>, steps: usiz
   println!("Elements: {:?}", elements);
 
   let mut most_common: (char, i64) = ('.', 0);
-  let mut least_common: (char, i64) = ('.', 10000000000000); //Some Arbitary large number.... bad job here :) 
+  let mut least_common: (char, i64) = ('.', i64::MAX); 
 
   for e in elements {
     if e.1 > most_common.1 {
