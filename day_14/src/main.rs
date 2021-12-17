@@ -55,7 +55,7 @@ fn read_input(filename: &str) -> (Vec<char>,  HashMap<(char,char), char>) {
   (template, rules)
 }
 
-fn puzzle_1(template: Vec<char>, rules: HashMap<(char, char), char>, steps: usize) -> i32 {
+fn puzzle_1(template: Vec<char>, rules: HashMap<(char, char), char>, steps: usize) -> i64 {
   
 
   let mut template = template.clone();
@@ -75,7 +75,7 @@ fn puzzle_1(template: Vec<char>, rules: HashMap<(char, char), char>, steps: usiz
     println!("Iteration: {} Completed in: {:?}", i, start.elapsed());
   }
 
-  let mut letters: HashMap<char, i32> = HashMap::new();
+  let mut letters: HashMap<char, i64> = HashMap::new();
 
   for c in template {
     letters.entry(c) 
@@ -83,8 +83,8 @@ fn puzzle_1(template: Vec<char>, rules: HashMap<(char, char), char>, steps: usiz
       .or_insert(1);
   }
 
-  let mut most_common: (char, i32) = ('.', 0);
-  let mut least_common: (char, i32) = ('.', 1000000000); //Some Arbitary large number.... bad job here :) 
+  let mut most_common: (char, i64) = ('.', 0);
+  let mut least_common: (char, i64) = ('.', 1000000000); //Some Arbitary large number.... bad job here :) 
 
   for l in letters.clone() {
 
