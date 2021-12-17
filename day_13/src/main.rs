@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::time::{Instant};
+use std::collections::HashMap;
 
 //Gobal file name for quick change
 const FILE_NAME: &str = "input.txt";
