@@ -11,4 +11,8 @@ And, here's where my solution fell apart. Increasing the iterations from 10 to 4
 
 I need to rewrite this entirely. There is probably a pattern I can establish, a way to predict how many letters there are, or a different way of couting characters and positions. 
 
+### Solution
+I tracked by the total number of Polymer Pairs created, and since each time a polymer pair 'splits' `n` number of new characters are inserted into the string. `n` characters is simply the new polymer character * the total of the previous polymer pair. 
+
 ## Summary
+Solution 1 was pretty easy and straightforward, the second one required a complete re-write. That took me quite a while to figure out and required a whiteboard. 
