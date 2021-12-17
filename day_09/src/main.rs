@@ -21,7 +21,7 @@ fn main() {
   println!("Sum of Risk Levels: {}", result);
   println!("----------------------");
   println!("Starting Puzzle 2");
-  // let result = puzzle_2(&height_map);
+  let result = puzzle_2(&height_map);
   println!("Three Largest Basins: {}", result);
   good_answer();
   
