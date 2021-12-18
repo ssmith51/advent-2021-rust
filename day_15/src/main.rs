@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::time::{Instant};
+use std::cmp::{min};
 
 //Gobal file name for quick change
 const FILE_NAME: &str = "test.txt";
@@ -42,5 +43,24 @@ fn read_input(filename: &str) -> Vec<Vec<i8>>  {
 
 fn puzzle_1(grid: Vec<Vec<i8>>) -> i8 {
   println!("Grid: {:?}", grid);
-  0 
+  let max_y = grid.len();
+  let max_x = grid[0].len();
+
+  let total = calc_cost(&grid, max_y, max_x);
+
+  total
+}
+
+fn calc_cost(grid: &Vec<Vec<i8>>, x: usize, y: usize) -> i8 {
+
+  let mut cost: i8 = 0;
+
+  if x == 0 && y == 0 {
+    cost = 0;
+  }
+
+  
+
+  cost
+
 }
