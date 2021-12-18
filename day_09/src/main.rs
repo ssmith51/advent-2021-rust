@@ -167,7 +167,7 @@ fn calc_basin(val: u32, x: usize, y: usize, height_map: &HeightMap, found: &Vec<
   let next: u32 = if x < height_map.max_x {height_map.readings[y][(x+1)] as u32} else {10};
 
   println!(" Val: {}, Bottom: {}, Top: {}, Prev: {}, Next: {}", val, bottom, top, prev, next);
-  let mut previous = found.iter().find(|&&n| n == (y,x));
+  let previous = found.iter().find(|&&n| n == (y,x));
   println!("Pervious Basin {:?}", previous);
   println!("Pervious Found {:?}", found);
 
