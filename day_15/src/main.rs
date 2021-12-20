@@ -47,23 +47,38 @@ fn puzzle_1(grid: Vec<Vec<i64>>) -> i64 {
   let max_x = grid[0].len() as i64;
 
   println!("Calculating Cost");
-  let total = calc_cost(&grid, max_x, max_y);
+  let total = calc_cost(&grid);
 
   total
 }
 
-fn calc_cost(grid: &Vec<Vec<i64>>, x: i64, y: i64) -> i64 {
-  print!(".");
-
+fn calc_cost(grid: &Vec<Vec<i64>>) -> i64 {
+//fn calc_cost(grid: &Vec<Vec<i64>>, x: i64, y: i64) -> i64 {
   let mut cost: i64 = 0;
 
-  if x == 0 || y == 0 {
-    cost = i64::MAX;
-  } else if x == 1 && y == 1 {
-    cost = 0;
-  } else {
-    cost = min(calc_cost(grid, x, y-1), calc_cost(grid, x-1, y)) + grid[(y-1) as usize] [(x-1) as usize];
+  let max_y = grid.len() as usize;
+  let max_x = grid[0].len() as usize;
+
+  let mut cache: Vec<Vec<i64>> = vec![vec![0; max_x]; max_y];
+
+  for i  in 0..max_y {
+
   }
+
+
+  //https://www.techiedelight.com/find-minimum-cost-reach-last-cell-matrix-first-cell/
+  
+  
+
+  // print!(".");
+
+  // if x == 0 || y == 0 {
+  //   cost = i64::MAX;
+  // } else if x == 1 && y == 1 {
+  //   cost = 0;
+  // } else {
+  //   cost = min(calc_cost(grid, x, y-1), calc_cost(grid, x-1, y)) + grid[(y-1) as usize] [(x-1) as usize];
+  // }
 
   cost
 
