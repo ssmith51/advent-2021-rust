@@ -43,8 +43,8 @@ fn read_input(filename: &str) -> Vec<Vec<i64>>  {
 
 fn puzzle_1(grid: Vec<Vec<i64>>) -> i64 {
   // println!("Grid: {:?}", grid);
-  let max_y = grid.len() as i64;
-  let max_x = grid[0].len() as i64;
+  // let max_y = grid.len() as i64;
+  // let max_x = grid[0].len() as i64;
 
   println!("Calculating Cost");
   let total = calc_cost(&grid);
@@ -54,7 +54,7 @@ fn puzzle_1(grid: Vec<Vec<i64>>) -> i64 {
 
 fn calc_cost(grid: &Vec<Vec<i64>>) -> i64 {
 //fn calc_cost(grid: &Vec<Vec<i64>>, x: i64, y: i64) -> i64 {
-  let mut cost: i64 = 0;
+  // let mut cost: i64 = 0;
 
   let max_y = grid.len() as usize;
   let max_x = grid[0].len() as usize;
@@ -63,12 +63,32 @@ fn calc_cost(grid: &Vec<Vec<i64>>) -> i64 {
 
   for i  in 0..max_y {
 
+    for j in 0..max_x {
+
+      cache[i][j] = grid[i][j];
+
+      if i == 0 && j > 0 {
+        cache[0][j] += cache[0][j - 1];
+      } 
+      // fill the first column (there is only one way to reach any cell
+      // in the first column from its adjacent top cell)
+      else if j == 0 && i > 0 {
+        cache[i][0] += cache[i - 1][0];
+      }
+
+      // fill the rest with the matrix (there are two ways to reach any cell
+      // in the rest of the matrix, from its adjacent left
+      // cell or adjacent top cell)
+      else if i > 0 && j > 0 {
+        cache[i][j] += min(cache[i - 1][j], cache[i][j - 1]);
+      }
+
+
+    }
+
   }
-
-
-  //https://www.techiedelight.com/find-minimum-cost-reach-last-cell-matrix-first-cell/
   
-  
+
 
   // print!(".");
 
@@ -80,6 +100,7 @@ fn calc_cost(grid: &Vec<Vec<i64>>) -> i64 {
   //   cost = min(calc_cost(grid, x, y-1), calc_cost(grid, x-1, y)) + grid[(y-1) as usize] [(x-1) as usize];
   // }
 
+  let cost = cache[max_y - 1][max_x - 1] - cache[0][0];
   cost
 
 }
