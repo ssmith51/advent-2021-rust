@@ -4,7 +4,7 @@ use std::time::{Instant};
 use std::cmp::{min};
 
 //Gobal file name for quick change
-const FILE_NAME: &str = "input.txt";
+const FILE_NAME: &str = "test.txt";
 
 fn main() {
   println!("Advent of Code - Day 12");
@@ -17,8 +17,8 @@ fn main() {
   println!("----------------------");
   println!("Starting Puzzle 2");
   let start = Instant::now();
-  // let result = puzzle_2(template, rules, 40);
-  println!("Result: {}\n Calculated in {:?}", 0, start.elapsed());
+  let result = puzzle_2(input);
+  println!("Result: {}\n Calculated in {:?}", result, start.elapsed());
 }
 
 
@@ -42,19 +42,95 @@ fn read_input(filename: &str) -> Vec<Vec<i64>>  {
 }
 
 fn puzzle_1(grid: Vec<Vec<i64>>) -> i64 {
-  // println!("Grid: {:?}", grid);
-  // let max_y = grid.len() as i64;
-  // let max_x = grid[0].len() as i64;
-
   println!("Calculating Cost");
   let total = calc_cost(&grid);
-
   total
 }
 
+fn puzzle_2(grid: Vec<Vec<i64>>) -> i64 {
+  println!("Calculating Cost");
+
+  //Rebuild Grid to be 5x larger
+  let max_y = grid.len() as usize;
+  let max_x = grid[0].len() as usize;
+  
+  //New Empty Grid
+  let mut new_grid: Vec<Vec<i64>> = vec![vec![0; max_x *5 ]; max_y * 5];
+  //Send new grid to calculate cost
+  println!("Starting Grid X: {}, Starting Grid Y: {}", max_x, max_y);
+  println!("New Grid X: {}, New Grid Y: {}", new_grid[0].len(), new_grid.len());
+
+  for y in 0..max_y {
+    // let mut new_row = String::new();
+    for x in 0..max_x {
+
+      let mut val = grid[y][x]; 
+      new_grid[y][x] = val;
+
+      for n in 1..5 {
+        val = new_val(val);
+        new_grid[y][x + (max_x * n)] = val;
+        new_grid[y + (max_y * n)][x] = val;
+        // new_grid[y][x + (max_x * n)] = new_val(val);
+        // new_grid[y + (max_y * n)][x + (max_x * n)] = val;
+      }
+
+
+      // let mut val = grid[y][x]; 
+      // new_grid[y][x] = val;
+
+      // val = new_val(val);
+      // new_grid[y][x + max_x] = val;
+      // new_grid[y + max_y][x] = val; 
+
+      // val = new_val(val);
+      // new_grid[y][x + (max_x * 2)] = val;
+      // new_grid[y + (max_y *2)][x + (max_x * 2)] = val;
+
+      // val = new_val(val);
+      // new_grid[y][x+ (max_x * 3)]= val;
+      // new_grid[y + (max_y *3)][x+ (max_x * 3)] = val;
+
+      // val = new_val(val);
+      // new_grid[y][x+ (max_x * 4)] = val;
+      // new_grid[y + (max_y *4)][x+ (max_x * 4)] = val;
+
+      // new_row.push(val.to_string().chars().nth(0).unwrap());
+
+
+    }
+    // println!("{}", new_row);
+  }
+
+  //Send new grid to calculate cost
+  println!("Starting Grid X: {}, Starting Grid Y: {}", max_x, max_y);
+  
+  println!("New Grid X: {}, New Grid Y: {}, Value: {}", new_grid[0].len(), new_grid.len(), new_grid[49][49]);
+
+  for y in 0..new_grid.len() {
+    // let mut new_row = String::new();
+    for x in 0..new_grid[0].len() {
+      print!("{}", new_grid[y][x]);
+    }
+    println!("");
+  }
+
+  let total = calc_cost(&new_grid);
+  total
+}
+
+fn new_val(val: i64) -> i64 {
+  let mut val = val;
+  if val == 9 {
+    val = 1; 
+  } else {
+    val += 1;
+  }
+  val
+
+}
+
 fn calc_cost(grid: &Vec<Vec<i64>>) -> i64 {
-//fn calc_cost(grid: &Vec<Vec<i64>>, x: i64, y: i64) -> i64 {
-  // let mut cost: i64 = 0;
 
   let max_y = grid.len() as usize;
   let max_x = grid[0].len() as usize;
@@ -88,17 +164,6 @@ fn calc_cost(grid: &Vec<Vec<i64>>) -> i64 {
 
   }
   
-
-
-  // print!(".");
-
-  // if x == 0 || y == 0 {
-  //   cost = i64::MAX;
-  // } else if x == 1 && y == 1 {
-  //   cost = 0;
-  // } else {
-  //   cost = min(calc_cost(grid, x, y-1), calc_cost(grid, x-1, y)) + grid[(y-1) as usize] [(x-1) as usize];
-  // }
 
   let cost = cache[max_y - 1][max_x - 1] - cache[0][0];
   cost
