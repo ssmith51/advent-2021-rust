@@ -4,7 +4,7 @@ use std::time::{Instant};
 use std::cmp::{min};
 
 //Gobal file name for quick change
-const FILE_NAME: &str = "test.txt";
+const FILE_NAME: &str = "input.txt";
 
 fn main() {
   println!("Advent of Code - Day 12");
@@ -60,6 +60,7 @@ fn puzzle_2(grid: Vec<Vec<i64>>) -> i64 {
   println!("Starting Grid X: {}, Starting Grid Y: {}", max_x, max_y);
   println!("New Grid X: {}, New Grid Y: {}", new_grid[0].len(), new_grid.len());
 
+  //Inital Grid Overlay and top row
   for y in 0..max_y {
     // let mut new_row = String::new();
     for x in 0..max_x {
@@ -71,49 +72,28 @@ fn puzzle_2(grid: Vec<Vec<i64>>) -> i64 {
         val = new_val(val);
         new_grid[y][x + (max_x * n)] = val;
         new_grid[y + (max_y * n)][x] = val;
-        // new_grid[y][x + (max_x * n)] = new_val(val);
-        // new_grid[y + (max_y * n)][x + (max_x * n)] = val;
       }
-
-
-      // let mut val = grid[y][x]; 
-      // new_grid[y][x] = val;
-
-      // val = new_val(val);
-      // new_grid[y][x + max_x] = val;
-      // new_grid[y + max_y][x] = val; 
-
-      // val = new_val(val);
-      // new_grid[y][x + (max_x * 2)] = val;
-      // new_grid[y + (max_y *2)][x + (max_x * 2)] = val;
-
-      // val = new_val(val);
-      // new_grid[y][x+ (max_x * 3)]= val;
-      // new_grid[y + (max_y *3)][x+ (max_x * 3)] = val;
-
-      // val = new_val(val);
-      // new_grid[y][x+ (max_x * 4)] = val;
-      // new_grid[y + (max_y *4)][x+ (max_x * 4)] = val;
-
-      // new_row.push(val.to_string().chars().nth(0).unwrap());
-
-
     }
-    // println!("{}", new_row);
   }
 
-  //Send new grid to calculate cost
-  println!("Starting Grid X: {}, Starting Grid Y: {}", max_x, max_y);
-  
-  println!("New Grid X: {}, New Grid Y: {}, Value: {}", new_grid[0].len(), new_grid.len(), new_grid[49][49]);
-
-  for y in 0..new_grid.len() {
-    // let mut new_row = String::new();
-    for x in 0..new_grid[0].len() {
-      print!("{}", new_grid[y][x]);
+  //Once we have the new starting grid set up, iterate through the rest 
+  for y in max_y .. max_y * 5 {
+    for x in max_x..max_x * 5 {
+      
+      let mut val = new_grid[y][x - max_x]; 
+      val = new_val(val);
+      new_grid[y][x] = val;
     }
-    println!("");
+
   }
+
+  // for y in 0..new_grid.len() {
+  //   // let mut new_row = String::new();
+  //   for x in 0..new_grid[0].len() {
+  //     print!("{}", new_grid[y][x]);
+  //   }
+  //   println!("");
+  // }
 
   let total = calc_cost(&new_grid);
   total
