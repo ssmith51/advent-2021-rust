@@ -63,6 +63,8 @@ fn puzzle_1(hex_input: String) -> i8 {
 
   println!("Header: {:?}, ID: {:?}", header, id);
 
+  
+
 
   //Temp - Return 1
   0
