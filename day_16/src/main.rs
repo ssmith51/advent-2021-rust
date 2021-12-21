@@ -55,6 +55,14 @@ fn puzzle_1(hex_input: String) -> i8 {
 
   println!("Binary Vec: {:?}", binary);
 
+  let mut header: Vec<char> = binary[0..3].to_vec();
+  header.insert(0, '0'); // Pad header with extra 0
+
+  let mut id: Vec<char> = binary[3..6].to_vec();
+  id.insert(0, '0'); // Pad ID with extra 0
+
+  println!("Header: {:?}, ID: {:?}", header, id);
+
 
   //Temp - Return 1
   0
