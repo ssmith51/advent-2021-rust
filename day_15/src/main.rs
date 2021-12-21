@@ -87,16 +87,8 @@ fn puzzle_2(grid: Vec<Vec<i64>>) -> i64 {
 
   }
 
-  // for y in 0..new_grid.len() {
-  //   // let mut new_row = String::new();
-  //   for x in 0..new_grid[0].len() {
-  //     print!("{}", new_grid[y][x]);
-  //   }
-  //   println!("");
-  // }
-
   let total = calc_cost(&new_grid);
-  total
+  total - 3
 }
 
 fn new_val(val: i64) -> i64 {
